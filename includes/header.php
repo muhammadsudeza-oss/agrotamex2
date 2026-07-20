@@ -38,8 +38,9 @@ $root_path = $is_subfolder ? '../' : './';
 <body>
     <nav class="navbar no-print">
         <div class="nav-container">
-            <a href="<?php echo $root_path; ?>index.php" class="brand">
-                <i class="fa-solid fa-seedling" style="color: #6ec088;"></i> AGROTAMEX <span>SUMINDO ABADI</span>
+            <a href="<?php echo $root_path; ?>index.php" class="brand" style="display: flex; align-items: center; gap: 8px;">
+                <img src="<?php echo $root_path; ?>assets/logo.png" alt="Logo PT" style="height: 38px; width: auto; object-fit: contain; display: block; margin: 0;">
+                AGROTAMEX <span>SUMINDO ABADI</span>
             </a>
             
             <ul class="nav-menu">
@@ -56,8 +57,11 @@ $root_path = $is_subfolder ? '../' : './';
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'karyawan.php') ? 'active' : ''; ?>">
                         <a href="/agrotamex1/manajer/karyawan.php"><i class="fa-solid fa-users"></i> Pengguna</a>
                     </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/laporan.php"><i class="fa-solid fa-file-invoice"></i> Histori Laporan</a>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_monitoring.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/laporan_monitoring.php"><i class="fa-solid fa-desktop"></i> Laporan Monitoring</a>
+                    </li>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_produktivitas.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/laporan_produktivitas.php"><i class="fa-solid fa-chart-line"></i> Laporan Produktivitas</a>
                     </li>
                 <?php elseif ($role === 'mandor'): ?>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && $current_dir == 'mandor') ? 'active' : ''; ?>">

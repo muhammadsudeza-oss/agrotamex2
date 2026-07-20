@@ -267,6 +267,15 @@ if (isset($_POST['submit_report'])) {
 
                     <!-- Camera Stream View -->
                     <div style="position: relative; width: 100%; max-width: 420px; margin: 0 auto; overflow: hidden; border-radius: 8px; border: 2px solid var(--card-border); background: #000; aspect-ratio: 4/3;">
+                        <!-- Camera Placeholder Overlay -->
+                        <div id="camera-placeholder" style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 20px; background: rgba(0,0,0,0.85); color: #fff; z-index: 5;">
+                            <i class="fa-solid fa-camera-slash" style="font-size: 2.5rem; margin-bottom: 12px; color: rgba(255,255,255,0.6);"></i>
+                            <span style="font-size: 0.9rem; text-align:center; font-weight:500;">Kamera Belum Aktif</span>
+                            <button type="button" class="btn btn-gold btn-sm" id="btnStartCamera" onclick="startCamera()" style="margin-top: 15px; padding: 8px 16px;">
+                                <i class="fa-solid fa-video"></i> Aktifkan Kamera
+                            </button>
+                        </div>
+
                         <video id="video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
                         
                         <!-- Captured Preview image -->
@@ -278,7 +287,7 @@ if (isset($_POST['submit_report'])) {
 
                     <!-- Camera controls buttons -->
                     <div style="margin-top: 15px; max-width: 420px; margin-left: auto; margin-right: auto;">
-                        <button type="button" class="btn btn-primary" id="btnCapture" onclick="takePhoto()" style="width: 100%; padding: 12px;">
+                        <button type="button" class="btn btn-primary" id="btnCapture" onclick="takePhoto()" disabled style="width: 100%; padding: 12px;">
                             <i class="fa-solid fa-camera-retro"></i> 📸 AMBIL FOTO SEKARANG
                         </button>
                         
@@ -322,6 +331,7 @@ if (isset($_POST['submit_report'])) {
 
     let currentLat = null;
     let currentLng = null;
+    let currentAddress = "Mencari nama lokasi...";
     let stream = null;
 
     // 1. Start rear camera
@@ -337,6 +347,15 @@ if (isset($_POST['submit_report'])) {
             video.srcObject = stream;
             video.style.display = 'block';
             resultImage.style.display = 'none';
+
+            // Hide camera placeholder overlay
+            const placeholder = document.getElementById('camera-placeholder');
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+
+            // Enable the capture button
+            btnCapture.removeAttribute('disabled');
         } catch (err) {
             errorMsg.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Gagal mengakses kamera belakang. Pastikan izin kamera telah diberikan!";
         }
@@ -361,6 +380,38 @@ if (isset($_POST['submit_report'])) {
                 gpsStatus.innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--success);"></i> Lokasi Terkunci: <strong>${currentLat.toFixed(5)}, ${currentLng.toFixed(5)}</strong>`;
                 gpsStatus.style.color = "var(--success)";
                 
+                // Fetch dynamic address name from GPS coordinates via Nominatim API
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${currentLat}&lon=${currentLng}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.address) {
+                            let parts = [];
+                            if (data.address.village) parts.push(data.address.village);
+                            else if (data.address.suburb) parts.push(data.address.suburb);
+                            else if (data.address.town) parts.push(data.address.town);
+                            
+                            if (data.address.city_district) parts.push(data.address.city_district);
+                            else if (data.address.district) parts.push(data.address.district);
+                            
+                            if (data.address.city) parts.push(data.address.city);
+                            else if (data.address.county) parts.push(data.address.county);
+                            
+                            if (data.address.state) parts.push(data.address.state);
+                            
+                            if (parts.length > 0) {
+                                currentAddress = parts.join(', ');
+                            } else {
+                                currentAddress = data.display_name || `Lat ${currentLat.toFixed(5)}, Lng ${currentLng.toFixed(5)}`;
+                            }
+                        } else {
+                            currentAddress = `Lat ${currentLat.toFixed(5)}, Lng ${currentLng.toFixed(5)}`;
+                        }
+                        gpsStatus.innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--success);"></i> Lokasi Terkunci: <strong>${currentLat.toFixed(5)}, ${currentLng.toFixed(5)}</strong><br><span style="font-size:0.75rem; color:#728c7f; font-weight:normal; display:block; margin-top:3px;">${currentAddress}</span>`;
+                    })
+                    .catch(err => {
+                        currentAddress = `Lat ${currentLat.toFixed(5)}, Lng ${currentLng.toFixed(5)}`;
+                    });
+                
                 // Check if photo is already taken to enable submit
                 if (photoBase64Input.value !== "") {
                     btnSubmitForm.removeAttribute('disabled');
@@ -375,9 +426,8 @@ if (isset($_POST['submit_report'])) {
         );
     }
 
-    // Initialize camera and location capture on window load
+    // Initialize location capture on window load (camera waits for click)
     window.addEventListener('load', () => {
-        startCamera();
         getGPS();
     });
 
@@ -412,7 +462,7 @@ if (isset($_POST['submit_report'])) {
         // Watermark lines
         const textTime = "Waktu: " + timestampStr;
         const textGPS = "GPS: Lat " + currentLat.toFixed(6) + " | Lng " + currentLng.toFixed(6);
-        const textOrigin = "BUKTI DOKUMENTASI FISIK AGROTAMEX";
+        const textOrigin = "Lokasi: " + currentAddress;
         
         // Position watermark overlay lines at the bottom of the image
         const yOrigin = canvas.height - 70;

@@ -115,8 +115,11 @@ try {
                 <a href="karyawan.php" class="btn btn-secondary" style="text-align: left;">
                     <i class="fa-solid fa-user-plus"></i> Kelola Pengguna
                 </a>
-                <a href="laporan.php" class="btn btn-secondary" style="text-align: left;">
-                    <i class="fa-solid fa-print"></i> Laporan & Cetak
+                <a href="laporan_monitoring.php" class="btn btn-secondary" style="text-align: left;">
+                    <i class="fa-solid fa-list-check"></i> Laporan Monitoring
+                </a>
+                <a href="laporan_produktivitas.php" class="btn btn-secondary" style="text-align: left;">
+                    <i class="fa-solid fa-print"></i> Laporan Produktivitas
                 </a>
             </div>
         </div>

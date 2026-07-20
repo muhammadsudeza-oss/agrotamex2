@@ -74,7 +74,7 @@ if (isset($_POST['login'])) {
     <div class="auth-wrapper">
         <div class="auth-card glass-panel">
             <div class="auth-header">
-                <i class="fa-solid fa-seedling" style="font-size: 3rem; color: #6ec088; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(110,192,136,0.3));"></i>
+                <img src="assets/logo.png" alt="Logo PT" style="display: block; margin: 0 auto 15px auto; height: 85px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.08));">
                 <h2>PT AGROTAMEX</h2>
                 <p>Pemantauan Produktivitas Karyawan</p>
             </div>
