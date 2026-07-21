@@ -172,36 +172,36 @@ if ($report_id > 0 && isset($_POST['reject_report']) && $report['status'] === 'p
             <?php else: ?>
                 <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Berikut adalah daftar laporan masuk yang memerlukan pemeriksaan dan tanda tangan verifikasi Anda:</p>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" style="width: 100%; vertical-align: middle;">
                         <thead>
                             <tr>
-                                <th>Tanggal Kerja</th>
-                                <th>Pelaksana (Karyawan)</th>
-                                <th>Aktivitas Kerja</th>
-                                <th>Pencapaian Realisasi</th>
-                                <th>Foto Bukti</th>
-                                <th>Aksi</th>
+                                <th style="width: 12%; text-align: center;">Tanggal Kerja</th>
+                                <th style="width: 20%;">Pelaksana (Karyawan)</th>
+                                <th style="width: 18%;">Aktivitas Kerja</th>
+                                <th style="width: 20%;">Pencapaian Realisasi</th>
+                                <th style="width: 12%; text-align: center;">Foto Bukti</th>
+                                <th style="width: 18%; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($pending_reports as $item): ?>
                                 <tr>
-                                    <td><?php echo date('d-m-Y', strtotime($item['tanggal'])); ?></td>
-                                    <td><strong><?php echo htmlspecialchars($item['nama_karyawan']); ?></strong></td>
-                                    <td><span class="badge badge-verified" style="font-size:0.75rem;"><?php echo htmlspecialchars($item['aktivitas']); ?></span></td>
+                                    <td style="text-align: center; font-size: 0.85rem; font-weight: 600; white-space: nowrap;"><?php echo date('d-m-Y', strtotime($item['tanggal'])); ?></td>
+                                    <td><strong style="color: var(--text-color); font-size: 0.9rem;"><?php echo htmlspecialchars($item['nama_karyawan']); ?></strong></td>
+                                    <td><span class="badge badge-verified" style="font-size:0.75rem; padding: 4px 10px; border-radius: 6px;"><?php echo htmlspecialchars($item['aktivitas']); ?></span></td>
                                     <td>
-                                        <strong style="color: var(--primary);"><?php echo (float)$item['jumlah_realisasi'] . ' ' . htmlspecialchars($item['unit']); ?></strong>
-                                        <span style="font-size:0.75rem; color:var(--text-muted);">/ <?php echo (float)$item['target_jumlah'] . ' ' . htmlspecialchars($item['unit']); ?></span>
+                                        <strong style="color: var(--primary); font-size: 0.92rem;"><?php echo (float)$item['jumlah_realisasi'] . ' ' . htmlspecialchars($item['unit']); ?></strong>
+                                        <span style="font-size:0.78rem; color:var(--text-muted);">/ <?php echo (float)$item['target_jumlah'] . ' ' . htmlspecialchars($item['unit']); ?></span>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <?php if (!empty($item['foto_bukti'])): ?>
-                                            <img src="../<?php echo htmlspecialchars($item['foto_bukti']); ?>" class="img-proof" onclick="openModal('../<?php echo htmlspecialchars($item['foto_bukti']); ?>', 'Bukti Foto: <?php echo htmlspecialchars($item['nama_karyawan']) . ' - ' . htmlspecialchars($item['aktivitas']); ?>')" />
+                                            <img src="../<?php echo htmlspecialchars($item['foto_bukti']); ?>" class="img-proof" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 2px solid var(--primary-light); cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.12);" onclick="openModal('../<?php echo htmlspecialchars($item['foto_bukti']); ?>', 'Bukti Foto: <?php echo htmlspecialchars($item['nama_karyawan']) . ' - ' . htmlspecialchars($item['aktivitas']); ?>')" title="Klik foto untuk memperbesar" />
                                         <?php else: ?>
-                                            <span style="opacity: 0.5; font-style: italic;">Tidak ada foto</span>
+                                            <span style="opacity: 0.5; font-style: italic; font-size: 0.78rem;">Tidak ada foto</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
-                                        <a href="verifikasi.php?report_id=<?php echo $item['id']; ?>" class="btn btn-primary btn-sm">
+                                    <td style="text-align: center;">
+                                        <a href="verifikasi.php?report_id=<?php echo $item['id']; ?>" class="btn btn-primary btn-sm" style="padding: 6px 14px; font-size: 0.78rem; font-weight: 600; border-radius: 6px;">
                                             <i class="fa-solid fa-stamp"></i> Periksa & Verifikasi
                                         </a>
                                     </td>

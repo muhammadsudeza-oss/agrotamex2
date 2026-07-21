@@ -40,7 +40,7 @@ try {
     $chart_targets = [];
     $chart_actuals = [];
     foreach ($history as $h) {
-        $chart_labels[] = date('d M', strtotime($h['tanggal'])) . " (" . $h['aktivitas'] . ")";
+        $chart_labels[] = date('d M', strtotime($h['tanggal']));
         $chart_targets[] = (float)$h['target_jumlah'];
         $chart_actuals[] = (float)$h['jumlah_realisasi'];
     }

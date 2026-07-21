@@ -515,6 +515,7 @@ if ($avg_achievement_all >= 80) {
                             <th>Alamat Lokasi</th>
                             <th>Catatan Karyawan</th>
                             <th>Bukti Foto</th>
+                            <th class="no-print">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -534,6 +535,24 @@ if ($avg_achievement_all >= 80) {
                                 $lng = trim($matches[2]);
                                 $clean_notes = trim($matches[3]);
                             }
+
+                            $detail_json = htmlspecialchars(json_encode([
+                                'nama_karyawan'    => $rep['nama_karyawan'],
+                                'tanggal_kerja'    => date('d F Y', strtotime($rep['tanggal'])),
+                                'aktivitas'        => $rep['aktivitas'],
+                                'target_jumlah'    => (float)$rep['target_jumlah'],
+                                'unit'             => $rep['unit'],
+                                'jumlah_realisasi' => (float)$rep['jumlah_realisasi'],
+                                'catatan_karyawan' => $rep['catatan_karyawan'] ?? '',
+                                'foto_bukti'       => !empty($rep['foto_bukti']) ? '../' . $rep['foto_bukti'] : '',
+                                'status'           => $rep['status'],
+                                'status_label'     => $rep['status'],
+                                'catatan_mandor'   => $rep['catatan_mandor'] ?? '',
+                                'waktu_mandor'     => $rep['tanggal_verifikasi_mandor'] ? date('d-m-Y H:i', strtotime($rep['tanggal_verifikasi_mandor'])) : '',
+                                'catatan_manajer'  => $rep['catatan_manajer'] ?? '',
+                                'waktu_manajer'    => $rep['tanggal_verifikasi_manajer'] ? date('d-m-Y H:i', strtotime($rep['tanggal_verifikasi_manajer'])) : '',
+                                'bonus_diterima'   => (float)($rep['bonus_diterima'] ?? 0),
+                            ]), ENT_QUOTES, 'UTF-8');
                             ?>
                             <tr>
                                 <td><?php echo date('d-m-Y', strtotime($rep['tanggal'])); ?></td>
@@ -582,12 +601,17 @@ if ($avg_achievement_all >= 80) {
                                         <span style="color:var(--text-muted); font-size:0.8rem; font-style:italic;">Tidak ada</span>
                                     <?php endif; ?>
                                 </td>
+                                <td class="no-print">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick='openReportDetailModal(<?php echo $detail_json; ?>)' style="padding: 3px 10px; font-size: 0.76rem;">
+                                        <i class="fa-solid fa-eye" style="color: var(--primary-light);"></i> Detail
+                                    </button>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
                         <tr style="background-color: #fcfcfc; font-weight: bold; border-top: 1.5px solid #000;">
-                            <td colspan="10" style="text-align: left; padding: 8px;">Total Data Laporan: <?php echo count($reports); ?> Laporan</td>
+                            <td colspan="11" style="text-align: left; padding: 8px;">Total Data Laporan: <?php echo count($reports); ?> Laporan</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -607,6 +631,7 @@ if ($avg_achievement_all >= 80) {
                             <th>Bukti Foto</th>
                             <th>Potongan Penalti</th>
                             <th>Bonus Diterima</th>
+                            <th class="no-print">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -618,6 +643,24 @@ if ($avg_achievement_all >= 80) {
                             }
                             $percentage = $rep['target_jumlah'] > 0 ? round(($realisasi_display / $rep['target_jumlah']) * 100, 1) : 0;
                             $color = ($percentage >= 80) ? 'var(--primary-light)' : (($percentage >= 60) ? 'var(--warning)' : 'var(--danger)');
+
+                            $detail_json = htmlspecialchars(json_encode([
+                                'nama_karyawan'    => $rep['nama_karyawan'],
+                                'tanggal_kerja'    => date('d F Y', strtotime($rep['tanggal'])),
+                                'aktivitas'        => $rep['aktivitas'],
+                                'target_jumlah'    => (float)$rep['target_jumlah'],
+                                'unit'             => $rep['unit'],
+                                'jumlah_realisasi' => (float)$rep['jumlah_realisasi'],
+                                'catatan_karyawan' => $rep['catatan_karyawan'] ?? '',
+                                'foto_bukti'       => !empty($rep['foto_bukti']) ? '../' . $rep['foto_bukti'] : '',
+                                'status'           => $rep['status'],
+                                'status_label'     => $rep['status'],
+                                'catatan_mandor'   => $rep['catatan_mandor'] ?? '',
+                                'waktu_mandor'     => $rep['tanggal_verifikasi_mandor'] ? date('d-m-Y H:i', strtotime($rep['tanggal_verifikasi_mandor'])) : '',
+                                'catatan_manajer'  => $rep['catatan_manajer'] ?? '',
+                                'waktu_manajer'    => $rep['tanggal_verifikasi_manajer'] ? date('d-m-Y H:i', strtotime($rep['tanggal_verifikasi_manajer'])) : '',
+                                'bonus_diterima'   => (float)($rep['bonus_diterima'] ?? 0),
+                            ]), ENT_QUOTES, 'UTF-8');
                             ?>
                             <tr>
                                 <td><?php echo date('d-m-Y', strtotime($rep['tanggal'])); ?></td>
@@ -646,18 +689,25 @@ if ($avg_achievement_all >= 80) {
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php if ($rep['potongan_penalti'] > 0): ?>
-                                        <strong style="color: var(--danger);">-Rp <?php echo number_format($rep['potongan_penalti'], 0, ',', '.'); ?></strong>
+                                    <?php if ((float)$rep['potongan_penalti'] > 0): ?>
+                                        <strong style="color: #c62828;">-Rp <?php echo number_format($rep['potongan_penalti'], 0, ',', '.'); ?></strong>
                                     <?php else: ?>
-                                        <span style="color: var(--text-muted); font-size: 0.8rem;">-</span>
+                                        <span style="color:var(--text-muted); font-size:0.8rem;">-</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php if ($rep['bonus_diterima'] < 0): ?>
-                                        <strong style="color: var(--danger);">-Rp <?php echo number_format(abs($rep['bonus_diterima']), 0, ',', '.'); ?></strong>
+                                    <?php if ((float)$rep['bonus_diterima'] > 0): ?>
+                                        <strong style="color: var(--success);">+Rp <?php echo number_format($rep['bonus_diterima'], 0, ',', '.'); ?></strong>
+                                    <?php elseif ((float)$rep['bonus_diterima'] < 0): ?>
+                                        <strong style="color: #c62828;">-Rp <?php echo number_format(abs($rep['bonus_diterima']), 0, ',', '.'); ?></strong>
                                     <?php else: ?>
-                                        <strong style="color: var(--success);">Rp <?php echo number_format($rep['bonus_diterima'], 0, ',', '.'); ?></strong>
+                                        <span style="color:var(--text-muted); font-size:0.8rem;">-</span>
                                     <?php endif; ?>
+                                </td>
+                                <td class="no-print">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick='openReportDetailModal(<?php echo $detail_json; ?>)' style="padding: 3px 10px; font-size: 0.76rem;">
+                                        <i class="fa-solid fa-eye" style="color: var(--primary-light);"></i> Detail
+                                    </button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -718,11 +768,24 @@ if ($avg_achievement_all >= 80) {
             size: A4 portrait;
             margin: 1.5cm;
         }
+        *, html, body, div, p, span, h1, h2, h3, h4, h5, h6, table, th, td, tr, strong, b, small {
+            font-family: "Times New Roman", Times, serif !important;
+            color: #000 !important;
+            border-color: #000 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
         body {
             background: #fff !important;
             color: #000 !important;
             font-family: "Times New Roman", Times, serif !important;
             font-size: 11pt !important;
+        }
+        i, .fa, .fas, .far, .fab, .fa-solid {
+            display: none !important;
         }
         .no-print {
             display: none !important;

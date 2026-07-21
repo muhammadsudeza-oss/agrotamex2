@@ -27,89 +27,104 @@ $root_path = $is_subfolder ? '../' : './';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrotamex Productivity</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom Style Sheet -->
-    <link rel="stylesheet" href="<?php echo $root_path; ?>assets/css/style.css">
+    <link rel="stylesheet" href="/agrotamex1/assets/css/style.css?v=<?php echo time(); ?>">
 </head>
-<body>
-    <nav class="navbar no-print">
-        <div class="nav-container">
-            <a href="<?php echo $root_path; ?>index.php" class="brand" style="display: flex; align-items: center; gap: 8px;">
-                <img src="<?php echo $root_path; ?>assets/logo.png" alt="Logo PT" style="height: 38px; width: auto; object-fit: contain; display: block; margin: 0;">
-                AGROTAMEX <span>SUMINDO ABADI</span>
+<body class="has-sidebar">
+
+    <!-- Dark Left Sidebar (100% Samping Kiri, Exact Match with Reference Photo) -->
+    <aside class="sidebar no-print" id="appSidebar">
+        <!-- Sidebar Brand Header -->
+        <div class="sidebar-header">
+            <a href="<?php echo $root_path; ?>index.php" class="sidebar-brand">
+                <img src="<?php echo $root_path; ?>assets/logo.png" alt="Logo PT" class="sidebar-logo">
+                <div class="brand-text">
+                    <strong>AGROTAMEX</strong>
+                    <span>SUMINDO ABADI</span>
+                </div>
             </a>
-            
-            <ul class="nav-menu">
+        </div>
+
+        <!-- Sidebar Navigation Menu -->
+        <div class="sidebar-nav">
+            <ul class="sidebar-menu">
                 <?php if ($role === 'manajer'): ?>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && $current_dir == 'manajer') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/index.php"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'targets.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/targets.php"><i class="fa-solid fa-list-check"></i> Penugasan</a>
-                    </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'verifikasi.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/verifikasi.php"><i class="fa-solid fa-circle-check"></i> Verifikasi</a>
+                        <a href="/agrotamex1/manajer/index.php"><i class="fa-solid fa-chart-line fa-fw"></i> <span>Dashboard</span></a>
                     </li>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'karyawan.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/karyawan.php"><i class="fa-solid fa-users"></i> Pengguna</a>
+                        <a href="/agrotamex1/manajer/karyawan.php"><i class="fa-solid fa-users fa-fw"></i> <span>Data Pengguna</span></a>
                     </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_monitoring.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/laporan_monitoring.php"><i class="fa-solid fa-desktop"></i> Laporan Monitoring</a>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'targets.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/targets.php"><i class="fa-solid fa-list-check fa-fw"></i> <span>Penugasan</span></a>
                     </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_produktivitas.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/manajer/laporan_produktivitas.php"><i class="fa-solid fa-chart-line"></i> Laporan Produktivitas</a>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'verifikasi.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/verifikasi.php"><i class="fa-solid fa-circle-check fa-fw"></i> <span>Verifikasi</span></a>
                     </li>
                 <?php elseif ($role === 'mandor'): ?>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && $current_dir == 'mandor') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/mandor/index.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                        <a href="/agrotamex1/mandor/index.php"><i class="fa-solid fa-chart-line fa-fw"></i> <span>Dashboard</span></a>
                     </li>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'verifikasi.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/mandor/verifikasi.php"><i class="fa-solid fa-circle-check"></i> Verifikasi Kerja</a>
-                    </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan.php' && $current_dir == 'mandor') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/mandor/laporan.php"><i class="fa-solid fa-file-invoice"></i> Laporan Pengawasan</a>
+                        <a href="/agrotamex1/mandor/verifikasi.php"><i class="fa-solid fa-circle-check fa-fw"></i> <span>Verifikasi Kerja</span></a>
                     </li>
                 <?php elseif ($role === 'karyawan'): ?>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && $current_dir == 'karyawan') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/karyawan/index.php"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                        <a href="/agrotamex1/karyawan/index.php"><i class="fa-solid fa-chart-line fa-fw"></i> <span>Dashboard</span></a>
                     </li>
                     <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'input_laporan.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/karyawan/input_laporan.php"><i class="fa-solid fa-file-arrow-up"></i> Input Laporan</a>
-                    </li>
-                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_kinerja.php') ? 'active' : ''; ?>">
-                        <a href="/agrotamex1/karyawan/laporan_kinerja.php"><i class="fa-solid fa-chart-line"></i> Laporan Kinerja</a>
+                        <a href="/agrotamex1/karyawan/input_laporan.php"><i class="fa-solid fa-file-arrow-up fa-fw"></i> <span>Input Laporan</span></a>
                     </li>
                 <?php endif; ?>
             </ul>
 
-            <div class="nav-user">
-                <a href="/agrotamex1/logout.php" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+            <div class="nav-section-title">LAPORAN</div>
+            <ul class="sidebar-menu">
+                <?php if ($role === 'manajer'): ?>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_monitoring.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/laporan_monitoring.php"><i class="fa-solid fa-file-lines fa-fw"></i> <span>Laporan Monitoring</span></a>
+                    </li>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_produktivitas.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/manajer/laporan_produktivitas.php"><i class="fa-solid fa-chart-pie fa-fw"></i> <span>Laporan Produktivitas</span></a>
+                    </li>
+                <?php elseif ($role === 'mandor'): ?>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan.php' && $current_dir == 'mandor') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/mandor/laporan.php"><i class="fa-solid fa-file-invoice fa-fw"></i> <span>Laporan Pengawasan</span></a>
+                    </li>
+                <?php elseif ($role === 'karyawan'): ?>
+                    <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'laporan_kinerja.php') ? 'active' : ''; ?>">
+                        <a href="/agrotamex1/karyawan/laporan_kinerja.php"><i class="fa-solid fa-chart-line fa-fw"></i> <span>Laporan Kinerja</span></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="sidebar-user-info">
+                <i class="fa-solid fa-user-gear"></i>
+                <span><?php echo htmlspecialchars($nama); ?> (<?php echo strtoupper($role); ?>)</span>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <a href="/agrotamex1/change_password.php" class="btn-sidebar-sub" title="Ubah Sandi"><i class="fa-solid fa-key"></i> Sandi</a>
+                <a href="/agrotamex1/logout.php" class="btn-sidebar-logout" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
             </div>
         </div>
-    </nav>
-    <main class="container">
-        <!-- Welcome Banner (Indonesian Welcome & Role Tag) -->
-        <div class="welcome-banner no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 12px 20px; background: var(--gold-light); border: 1px solid var(--card-border); border-radius: 8px; font-size: 0.9rem; color: var(--text-color);">
-            <div>
-                <i class="fa-regular fa-circle-user" style="color: var(--primary); font-size: 1.1rem; margin-right: 6px; vertical-align: middle;"></i>
-                Halo, <strong><?php echo htmlspecialchars($nama); ?></strong> 
-                <span class="role-tag" style="background: var(--primary); color: #fff; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; text-transform: uppercase; margin-left: 8px; border: 1px solid var(--primary-light);"><?php echo $role; ?></span>
-            </div>
-            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 15px;">
-                <span>
-                    <i class="fa-regular fa-calendar" style="margin-right: 5px;"></i>
-                    <?php 
-                    // Indonesian date format helper
-                    $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                    $months = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                    echo $days[date('w')] . ', ' . date('d') . ' ' . $months[date('n')] . ' ' . date('Y');
-                    ?>
-                </span>
-                <span style="color: var(--card-border);">|</span>
-                <a href="/agrotamex1/change_password.php" style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-key" style="font-size: 0.8rem;"></i> Ubah Sandi</a>
-            </div>
-        </div>
+    </aside>
+
+    <!-- Right Main Content Area Wrapper -->
+    <div class="main-wrapper">
+        <!-- Minimal Top Header Bar (Only Hamburger Menu Toggle on Top Left) -->
+        <header class="top-header no-print">
+            <button class="hamburger-btn" id="sidebarToggle" title="Toggle Sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </header>
+
+        <!-- Main Page Container -->
+        <main class="container">
